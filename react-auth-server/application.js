@@ -7,6 +7,8 @@ const bodyParser = require('body-parser');
 
 const utils = require('./util/response');
 
+const path = require('path');
+
 require('dotenv').config();
 
 const authCheck = jwt({
@@ -49,10 +51,10 @@ app.get('/api/health', (req,res)=>{
 });
 
 app.get('/api/parties', authCheck,parties_controller.getParties);
-app.post('/api/parties',authCheck, bodyParser.json(), parties_controller.createParty);
+app.post('/api/parties',authCheck, checkAdmin,bodyParser.json(), parties_controller.createParty);
 app.get('/api/parties/:id', authCheck,parties_controller.getPartyById);
-app.put('/api/parties/:id', authCheck, bodyParser.json(),parties_controller.updateParty);
-app.delete('/api/parties/:id', authCheck,parties_controller.deleteParty);
+app.put('/api/parties/:id', authCheck, checkAdmin,bodyParser.json(),parties_controller.updateParty);
+app.delete('/api/parties/:id', authCheck, checkAdmin,parties_controller.deleteParty);
 
 //Get list of guests for a party
 app.get('/api/guests', authCheck, guests_controller.getGuestForParty);
@@ -60,10 +62,12 @@ app.post('/api/guests',authCheck, bodyParser.json(),guests_controller.addGuestTo
 app.put('/api/guests',authCheck, bodyParser.json(),guests_controller.updateGuestForParty);
 app.delete('/api/guests/:id',authCheck, bodyParser.json(),guests_controller.removeGuestFromParty);
 
-app.get('/api/auth', authCheck,(req, res)=>{
+app.get('/api/auth', authCheck,checkAdmin,(req, res)=>{
   res.json({message:'Token', token: process.env.AUTH0_TOKEN});
 });
 
+app.use('/assets', express.static(path.join(__dirname, '../dist/assets')));
+app.use('*',express.static(path.join(__dirname,'../dist')));
 
 //Export the application
 module.exports = app;
