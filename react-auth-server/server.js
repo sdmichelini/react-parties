@@ -9,6 +9,9 @@ let app = require('./application');
 let party = require('./models/party');
 let guest = require('./models/guest');
 
+let user = require('./models/user');
+
+
 let check_in = require('./controllers/checkIns');
 
 const PORT = process.env.PORT || 3001;
@@ -24,6 +27,8 @@ MongoClient.connect(process.env.MONGODB_URI, (err, database) => {
   //Init the Databases
   party.initDb(db);
   guest.initDb(db);
+
+  user.loadAdmins(undefined);
 
   check_in.initWs(server);
 

@@ -21,6 +21,8 @@ const groups_controller = require('./controllers/groups');
 const guests_controller = require('./controllers/guests');
 const parties_controller = require('./controllers/parties');
 
+const user_model = require('./models/user');
+
 //Start application vars
 let app = express();
 
@@ -32,7 +34,8 @@ const ALLOWED_CLIENTS = [
 
 function checkAdmin(req,res,next) {
   let auth = false;
-  for(let client of ALLOWED_CLIENTS) {
+  let clients = user_model.getAdmins();
+  for(let client of clients) {
     if(client === req.user.sub) {
       auth = true;
       next();
