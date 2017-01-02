@@ -5,18 +5,19 @@
   "main": "",
   "scripts": {
     "clean": "rimraf dist/*",
-    "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
+    "copy": "copyfiles -f ./client/index.html ./client/favicon.ico ./dist",
     "dist": "npm run copy & webpack --env=dist",
-    "lint": "eslint ./src",
+    "lint": "eslint ./client",
     "posttest": "npm run lint",
     "release:major": "npm version major && npm publish && git push --follow-tags",
     "release:minor": "npm version minor && npm publish && git push --follow-tags",
     "release:patch": "npm version patch && npm publish && git push --follow-tags",
     "serve": "node server.js --env=dev",
     "serve:dist": "node server.js --env=dist",
-    "start": "node ./react-auth-server/server.js",
+    "start": "node ./server/server.js",
     "test": "karma start",
-    "test:watch": "karma start --autoWatch=true --singleRun=false"
+    "test:watch": "karma start --autoWatch=true --singleRun=false",
+    "test:common": "mocha -R Spec -b common/tests/validators.test.js"
   },
   "repository": "",
   "keywords": [],

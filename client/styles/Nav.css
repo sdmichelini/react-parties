@@ -1,0 +1,26 @@
+.navbar-red {
+  background-color: #c62727;
+  border-color: #b21e1e;
+  border-radius: 0;
+}
+
+.navbar-red-nav > li > a {
+  color: #fff !important;
+}
+
+.navbar-red-nav > li > a:hover {
+  color: #eee !important;
+}
+
+.navbar-red-nav > li:hover {
+  background-color: #b21e1e;
+}
+
+.navbar-red-header > a{
+  color: #fff !important;
+}
+
+.navbar-red-header > a:hover {
+  color: #eee !important;
+  background-color: #b21e1e !important;
+}

@@ -1,0 +1,56 @@
+.guest-list-item {
+  border-style: solid;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 8px;
+  border-color: black;
+}
+
+.female {
+  background-color: #f08080;
+  color: white;
+}
+
+.male {
+  background-color: #4286f4;
+  color: white;
+}
+
+.guest-list {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.guest-name {
+  font-weight: bold;
+  font-size: 140%;
+}
+
+.btn-male {
+  background-color: #4286f4;
+  border-color: #3276e4;
+  color: white;
+  margin-right: 8px;
+  margin-top: 8px;
+}
+
+.btn-male:hover {
+  background-color: #3781e9;
+  border-color: #3276e4;
+  color: white!important;
+}
+
+.btn-female {
+  background-color: #f08080;
+  border-color: #d06060;
+  color: white;
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+.btn-female:hover {
+  background-color: #e07070;
+  border-color: #d06060;
+  color: white!important;
+}
