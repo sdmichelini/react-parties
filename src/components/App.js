@@ -23,6 +23,10 @@ class AppComponent extends Component {
               {this.props.children}
             </Col>
           </Row>
+          <Row>
+            <br/>
+            <div className='footer text-muted'>Designed by J in Pennsylvania</div>
+          </Row>
         </Grid>
       </div>
     );

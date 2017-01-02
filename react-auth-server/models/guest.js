@@ -2,6 +2,7 @@
 
 const ObjectId = require('mongodb').ObjectID;
 
+const constants = require('../constants/constants');
 
 
 //This file is responsible for the cache along with database access and keeping the two in sync
@@ -96,12 +97,18 @@ let updateGuestForParty = (id, status, cb) => {
     cb('invalid id', undefined);
   } else {
     let obj_id = new ObjectId(id);
-    guest_collection.update({_id:obj_id}, {$set: {status:status}}, (err, count, result) => {
+    let updatedObj = {status: status};
+    // Log when they are checked in
+    if(status == constants.STATUS_CHECKED_IN) {
+      updatedObj = {status: status, checked_in: Date.now()};
+    }
+    guest_collection.update({_id:obj_id}, {$set: updatedObj}, (err, count, result) => {
       if(err) {
         cb(err, undefined);
         return console.error('DB Error Updating Guest for Party');
       } else {
         let guest;
+        //Update the cache
         for(let i = 0; i < GUESTS.length; i++){
           if(GUESTS[i]._id == id) {
             GUESTS[i].status = status;

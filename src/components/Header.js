@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import { Nav, Navbar, NavItem } from 'react-bootstrap';
+
 import AuthActions from '../actions/AuthActions';
 import AuthStore from '../stores/AuthStore';
+
+require('styles/Nav.css');
 
 class HeaderComponent extends Component {
 
@@ -51,27 +53,38 @@ class HeaderComponent extends Component {
     let link = '/';
     if(this.state.authenticated && this.state.admin) {
       content = (
-        <Nav>
-          <NavItem onClick={this.logout}>Logout</NavItem>
+        <ul className='nav navbar-nav navbar-red-nav'>
+          <li role='presentation'><a onClick={this.logout} href='#'>Logout</a></li>
           <li role='presentation'><Link to={'/dashboard'}>Dashboard</Link></li>
-        </Nav>
+        </ul>
       );
       link = '/parties';
     } else if(this.state.authenticated) {
       content = (
-        <Nav>
-          <NavItem onClick={this.logout} eventKey={1}>Logout</NavItem>
-        </Nav>
+        <ul className='nav navbar-nav navbar-red-nav'>
+          <li role='presentation'><a onClick={this.logout}>Logout</a></li>
+        </ul>
       );
       link = '/parties';
     } else {
-      content = (
-        <Nav>
-          <NavItem onClick={this.login}>Login</NavItem>
-        </Nav>
-      );
+        content = (
+          <ul className='nav navbar-nav navbar-red-nav'>
+            <li role='presentation'><a onClick={this.login}>Login</a></li>
+          </ul>
+        );
     }
     return (
+      <nav className='navbar navbar-default navbar-red'>
+        <div className='container-fluid'>
+          <div className='navbar-header navbar-red-header'>
+            <Link className='navbar-brand' to={ link }>Parties</Link>
+          </div>
+          { content }
+        </div>
+      </nav>
+    );
+
+    /*(
       <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
@@ -80,7 +93,7 @@ class HeaderComponent extends Component {
         </Navbar.Header>
         {content}
       </Navbar>
-    );
+    );*/
   }
 }
 

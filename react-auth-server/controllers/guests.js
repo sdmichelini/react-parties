@@ -6,22 +6,7 @@ const guest_model = require('../models/guest');
 
 const check_in = require('./checkIns');
 
-const STATUS_AWAITING_APPROVAL = 0;
-const STATUS_ON_LIST = 1;
-const STATUS_CHECKED_IN = 2;
-
-let GUESTS = [
-  {party_id: '1', name: 'Test Guest', added_by: 'Test Brother 1', male: false, status: STATUS_ON_LIST, checked_in: 0, id: '0'},
-  {party_id: '1', name: 'Test Guest', added_by: 'Test Brother 1', male: false, status: STATUS_ON_LIST, checked_in: 0, id: '1'},
-  {party_id: '1', name: 'Test Guest', added_by: 'Test Brother 1', male: false, status: STATUS_ON_LIST, checked_in: 0, id: '2'},
-  {party_id: '1', name: 'Test Guest', added_by: 'Test Brother 1', male: false, status: STATUS_ON_LIST, checked_in: 0, id: '3'},
-  {party_id: '1', name: 'Test Guest', added_by: 'Test Brother 1', male: true, status: STATUS_ON_LIST, checked_in: 0, id: '4'},
-  {party_id: '1', name: 'Matt Freed', added_by: 'Bob', male: true, status: STATUS_ON_LIST, checked_in: 0, id: '5'},
-  {party_id: '1', name: 'Peter DiPersio', added_by: 'Jim', male: true, status: STATUS_ON_LIST, checked_in: 0, id: '6'},
-  {party_id: '2', name: 'Test Guest 2', added_by: 'Test Brother 2', male: true, status: STATUS_ON_LIST, checked_in: 0, id: '1'}
-];
-
-let next_id = 7;
+const constants = require('../constants/constants');
 
 const ALLOWED_CLIENTS = [
   'auth0|5813aac8f1413bed0950e515'
@@ -40,14 +25,14 @@ function runApprovalTesting(guest) {
   let sum = 0;
   let index = -1;
   for(let i = 0; i < GUESTS.length; i++) {
-    if(GUESTS[i].male && (GUESTS[i].status == STATUS_ON_LIST)) {
+    if(GUESTS[i].male && (GUESTS[i].status == constants.STATUS_ON_LIST)) {
       sum++;
     } else if(GUESTS[i].id == guest.id) {
       index = i;
     }
   }
   if((sum < 3) && (index != -1)) {
-    GUESTS[index].status = STATUS_ON_LIST;
+    GUESTS[index].status = constants.STATUS_ON_LIST;
   }
 }
 
@@ -84,9 +69,9 @@ let addGuestToParty = (req, res)=> {
       if(guest.name && (guest.male != undefined)) {
         guest.checked_in = 0;
         if(isClientAdmin(req.user.sub) || !guest.male) {
-          guest.status = STATUS_ON_LIST;
+          guest.status = constants.STATUS_ON_LIST;
         } else {
-          guest.status = STATUS_AWAITING_APPROVAL;
+          guest.status = constants.STATUS_AWAITING_APPROVAL;
         }
         guest.party_id = req.body.party_id;
         guest.added_by = req.body.added_by;
