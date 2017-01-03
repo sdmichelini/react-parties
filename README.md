@@ -4,5 +4,6 @@ Guest management system written using ReactJS on the front-end along with an Exp
 
 ## Organization ##
 
-- Client is located in `src`
-- Server is located in `react-auth-server`
+- Client is located in `client`
+- Server is located in `server`
+- Common modules are located in `common`

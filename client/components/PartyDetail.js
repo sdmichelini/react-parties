@@ -12,13 +12,11 @@ import PartyStore from '../stores/PartyStore';
 
 import AuthStore from '../stores/AuthStore';
 
+import GuestUtils from '../utils/GuestUtils';
+
 import GuestListItem from './GuestListItem';
 
 import {WS_URL} from '../constants/UrlConstants';
-
-import { Link } from 'react-router';
-
-import { nameValidator } from '../../common/validators';
 
 function getGuestListItem2(guest, open) {
   let ret = (
@@ -29,6 +27,22 @@ function getGuestListItem2(guest, open) {
     />
   );
   return ret;
+}
+
+function guestSortCompare(guest1, guest2) {
+  let guest1_names = guest1.name.split(' ');
+  let guest1_last_name = guest1_names[guest1_names.length - 1].toLowerCase();
+
+  let guest2_names = guest2.name.split(' ');
+  let guest2_last_name = guest2_names[guest2_names.length - 1].toLowerCase();
+
+  if(guest1_last_name < guest2_last_name) {
+    return -1;
+  } else if(guest1_last_name > guest2_last_name) {
+    return 1;
+  } else {
+    return 0;
+  }
 }
 
 let ws;
@@ -54,7 +68,7 @@ class PartyDetailComponent extends React.Component {
   }
 
   onEvent(e) {
-    console.log(e.data);
+    //console.log(e.data);
   }
 
   cleanUp() {
@@ -116,7 +130,7 @@ class PartyDetailComponent extends React.Component {
     let female_guests = [];
     let un_male_guests = [];
     let un_female_guests = [];
-    let guests = GuestStore.getGuests();
+    let guests = GuestStore.getGuests().sort(guestSortCompare);
     let user = JSON.parse(AuthStore.getUser());
     let name;
     if(user.user_metadata && user.user_metadata.name) {
@@ -161,12 +175,12 @@ class PartyDetailComponent extends React.Component {
     let un_male_guests = [];
     let un_female_guests = [];
     if(filter == '') {
-      guests = GuestStore.getGuests();
+      guests = GuestStore.getGuests().sort(guestSortCompare);
 
     } else {
       guests = GuestStore.getGuests().filter((guest)=> {
         return (guest.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)||(guest.added_by.toLowerCase().indexOf(filter.toLowerCase()) > -1);
-      });
+      }).sort(guestSortCompare);
 
     }
     let user = JSON.parse(AuthStore.getUser());
@@ -208,81 +222,34 @@ class PartyDetailComponent extends React.Component {
 
   onGuestAdd(male) {
     //We have multiple
-    let guests = [];
-    if(this.state.search_filter.indexOf(',') > -1) {
-      let guest_names = this.state.search_filter.split(',');
+    let guest_names = [];
+
+    let compare_guests = GuestStore.getGuests().filter((guest) => {
+      return guest.male == male;
+    });
+
+    guest_names = GuestUtils.sanitizeGuestsWithGuests(this.state.search_filter, compare_guests);
+
+    if(guest_names.length == 0) {
+      alert('No Valid Guests Found.');
+    } else {
+      let guests = [];
+
       for(let name of guest_names) {
-        name = name.trim();
-        if(!nameValidator(name)) {
-          continue;
-        }
         let new_guest = {};
         new_guest.name = name;
         new_guest.male = male;
-        if(male) {
-          let matching = GuestStore.getGuests().filter((guest)=>{
-            return (guest.name.toLowerCase()  == new_guest.name.toLowerCase() );
-          });
-          if(matching.length == 0){
-            guests.push(new_guest);
-          }
-        } else {
-          let matching = GuestStore.getGuests().filter((guest)=>{
-            return (guest.name.toLowerCase()  == new_guest.name.toLowerCase() );
-          });
-          if(matching.length == 0){
-            guests.push(new_guest);
-          }
-        }
 
+        guests.push(new_guest);
       }
-      if(guests.length == 0){
-        return;
-      }
-    } else {
-      let new_guest = {};
-      new_guest.name = this.state.search_filter.trim();
-      if(!nameValidator(new_guest.name)) {
-        return;
-      }
-      new_guest.male = male;
-      if(male) {
-        let matching = this.state.male_guests.filter((guest)=>{
-          return (guest.name.toLowerCase() == new_guest.name.toLowerCase());
-        });
-        if(matching.length == 0){
-          guests.push(new_guest);
-        } else {
-          return;
-        }
-      } else {
-        let matching = this.state.female_guests.filter((guest)=>{
-          return (guest.name.toLowerCase() == new_guest.name.toLowerCase());
-        });
-        if(matching.length == 0){
-          guests.push(new_guest);
-        } else {
-          return;
-        }
-      }
+
+      let added_by = AuthStore.getName();
+      GuestActions.addGuestsToParty({
+        guests: guests,
+        added_by: added_by,
+        party_id: this.props.params.id
+      });
     }
-    let user = JSON.parse(AuthStore.getUser());
-    let name;
-    if(user.user_metadata && user.user_metadata.name) {
-      name = user.user_metadata.name;
-    } else if(user.nickname) {
-      name = user.nickname;
-    } else {
-      name = undefined;
-      return;
-    }
-
-    GuestActions.addGuestsToParty({
-      guests: guests,
-      added_by: name,
-      party_id: this.props.params.id
-    });
-
     this.setState({
       search_filter: ''
     });
@@ -297,10 +264,12 @@ class PartyDetailComponent extends React.Component {
   }
 
   render() {
+    // Logic for Party
     let party_name = this.state.party.name || 'Party Not Found';
 
     let is_party_open = (this.state.party && this.state.party.status && (this.state.party.status == 1));
 
+    // Create Guest List Items
     let males = [];
     if(this.state.male_guests && (this.state.male_guests.length > 0)) {
       for(let male of this.state.male_guests) {
@@ -352,7 +321,9 @@ class PartyDetailComponent extends React.Component {
     let male_text = (this.state.search_filter.indexOf(',') > -1) ? 'Add Males' : 'Add Male';
     let female_text = (this.state.search_filter.indexOf(',') > -1) ? 'Add Females' : 'Add Female';
 
-
+    // Now Disable the Button if the Names Aren't Valid
+    let add_male_enabled = (this.state.search_filter.length > 0) && (GuestUtils.sanitizeGuestsWithGuests(this.state.search_filter, this.state.male_guests).length > 0);
+    let add_female_enabled = (this.state.search_filter.length > 0) && (GuestUtils.sanitizeGuestsWithGuests(this.state.search_filter, this.state.female_guests).length > 0);
 
     let manageText;
 
@@ -400,8 +371,8 @@ class PartyDetailComponent extends React.Component {
       <div>
         <h1>{ party_name }</h1>
         <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} onChange={this.handleFilterChange}/>
-        <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!(this.state.search_filter.length > 0)}>{ male_text }</button>
-        <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!(this.state.search_filter.length > 0)}>{ female_text }</button>
+        <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
+        <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
         <div className='row'>
           <div className='col-xs-12 col-sm-6'>
             <h3>Males</h3>
