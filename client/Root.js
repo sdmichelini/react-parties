@@ -8,6 +8,8 @@ import PartyDetail from './components/PartyDetail';
 import NotAuthorized from './components/NotAuthorized';
 import CreateParty from './components/CreateParty';
 import User from './components/Users';
+import Dashboard from './components/Dashboard';
+import BlackList from './components/BlackList';
 
 import AuthUtils from './utils/AuthUtils.js';
 
@@ -28,6 +30,8 @@ class Root extends Component {
           <Route path='/notAuthorized' component={NotAuthorized}/>
           <Route path='/users' component={User} onEnter={AuthUtils.requireAdmin}/>
           <Route path='/create/party' component={CreateParty} onEnter={AuthUtils.requireAdmin}/>
+          <Route path='/dashboard' component={Dashboard} onEnter={AuthUtils.requireAdmin}/>
+          <Route path='/blacklist' component={BlackList} onEnter={AuthUtils.requireAdmin}/>
         </Route>
       </Router>
     );

@@ -20,6 +20,7 @@ const authCheck = jwt({
 const groups_controller = require('./controllers/groups');
 const guests_controller = require('./controllers/guests');
 const parties_controller = require('./controllers/parties');
+const black_list_controller = require('./controllers/blackList');
 
 const user_model = require('./models/user');
 
@@ -65,8 +66,23 @@ app.post('/api/guests',authCheck, bodyParser.json(),guests_controller.addGuestTo
 app.put('/api/guests',authCheck, bodyParser.json(),guests_controller.updateGuestForParty);
 app.delete('/api/guests/:id',authCheck, bodyParser.json(),guests_controller.removeGuestFromParty);
 
+app.get('/api/blacklist', authCheck, black_list_controller.getBlackList);
+app.post('/api/blacklist', authCheck, checkAdmin, bodyParser.json(), black_list_controller.addBlackListItem);
+app.delete('/api/blacklist/:id', authCheck, checkAdmin, black_list_controller.deleteBlackListItem);
+
 app.get('/api/auth', authCheck,checkAdmin,(req, res)=>{
   res.json({message:'Token', token: process.env.AUTH0_TOKEN});
+});
+
+app.get('/api/*', (req,res) => {
+  res.status(404);
+  res.json(utils.generateError('API Path Not Found'));
+});
+
+app.use((err, req, res, next) => {
+  if(err.name == 'UnauthorizedError') {
+    res.status(401).json(utils.generateError('Invalid or Missing Token'));
+  }
 });
 
 app.use('/assets', express.static(path.join(__dirname, '../dist/assets')));

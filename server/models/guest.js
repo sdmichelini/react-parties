@@ -23,14 +23,14 @@ let initDb = (db) => {
     guest_collection = db.collection('guests');
     initCache();
   } else {
-    console.err('Guest Collection Received Invalid DB Object.');
+    console.error('Guest Collection Received Invalid DB Object.');
   }
 }
 
 function initCache() {
   guest_collection.find().toArray((err, guests) => {
     if (err) {
-      return console.err('Failed to initialize guests cache w/ err: '+err);
+      return console.error('Failed to initialize guests cache w/ err: '+err);
     }
     // Add all items to GUESTS
     GUESTS = GUESTS.concat(guests);
@@ -83,7 +83,7 @@ let addGuestsToParty = (guests, cb) => {
   guest_collection.insert(guests, (err, result) => {
     if(err) {
       cb(err, undefined);
-      return console.err('DB Error Adding Guests to Party');
+      return console.error('DB Error Adding Guests to Party');
     } else {
       GUESTS = GUESTS.concat(guests);
       cb(undefined, guests);
@@ -130,7 +130,7 @@ let removeGuestFromParty = (id, cb) => {
     guest_collection.remove({_id:obj_id}, (err, count)=> {
       if(err) {
         cb(err, undefined);
-        return console.err('DB Error Updating Guest for Party');
+        return console.error('DB Error Updating Guest for Party');
       } else {
         let guest;
         for(let i = 0; i < GUESTS.length; i++) {
@@ -166,9 +166,24 @@ let removeAllGuestsFromParty = (id, cb) => {
   }
 }
 
+// Uses the promise
+let getGuestsForPartyPromise = (party_id) => {
+  return new Promise((resolve, reject) => {
+    getGuestsForParty(party_id, (err, guests) => {
+      if(err) {
+        reject(err);
+      }
+      else {
+        resolve(guests);
+      }
+    });
+  });
+}
+
 module.exports = {
   initDb: initDb,
   getGuestsForParty: getGuestsForParty,
+  getGuestsForPartyPromise: getGuestsForPartyPromise,
   addGuestsToParty: addGuestsToParty,
   updateGuestForParty: updateGuestForParty,
   removeGuestFromParty: removeGuestFromParty,

@@ -16,7 +16,7 @@ let initDb = (db) => {
     party_collection = db.collection('parties');
     initCache();
   } else {
-    console.err('Parties Collection Received Invalid DB Object.');
+    console.error('Parties Collection Received Invalid DB Object.');
   }
 }
 
@@ -154,10 +154,24 @@ let updateParty = (id, status, cb) => {
   }
 }
 
+let getPartyByIdPromise = (id) => {
+  console.log('getting party id');
+  return new Promise((resolve, reject) => {
+    getPartyById(id, (err, party)=>{
+      if(err) {
+        reject(err);
+      } else {
+        resolve(party);
+      }
+    });
+  });
+}
+
 module.exports = {
   initDb: initDb,
   getParties: getParties,
   getPartyById: getPartyById,
+  getPartyByIdPromise: getPartyByIdPromise,
   createParty: createParty,
   deleteParty: deleteParty,
   updateParty: updateParty,

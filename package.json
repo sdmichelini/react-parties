@@ -17,7 +17,7 @@
     "start": "node ./server/server.js",
     "test": "karma start",
     "test:watch": "karma start --autoWatch=true --singleRun=false",
-    "test:common": "mocha -R Spec -b common/tests/validators.test.js"
+    "test:common": "mocha -R Spec -b common/tests/common.test.js"
   },
   "repository": "",
   "keywords": [],

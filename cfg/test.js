@@ -1,7 +1,7 @@
 'use strict';
 
 let path = require('path');
-let srcPath = path.join(__dirname, '/../src/');
+let srcPath = path.join(__dirname, '/../client/');
 
 let baseConfig = require('./base');
 
@@ -31,7 +31,7 @@ module.exports = {
         include: [].concat(
           baseConfig.additionalPaths,
           [
-            path.join(__dirname, '/../src'),
+            path.join(__dirname, '/../client'),
             path.join(__dirname, '/../test')
           ]
         )
