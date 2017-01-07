@@ -8,6 +8,7 @@ let app = require('./application');
 
 let party = require('./models/party');
 let guest = require('./models/guest');
+let bl = require('./models/blackList');
 
 let user = require('./models/user');
 
@@ -27,6 +28,7 @@ MongoClient.connect(process.env.MONGODB_URI, (err, database) => {
   //Init the Databases
   party.initDb(db);
   guest.initDb(db);
+  bl.initDb(db);
 
   user.loadAdmins(undefined);
 

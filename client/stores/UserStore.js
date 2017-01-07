@@ -179,7 +179,6 @@ UserStore.dispatchToken = AppDispatcher.register(action => {
           break;
         }
       }
-      console.log(users2);
       setUsers(users2);
       UserStore.emitChange();
       break

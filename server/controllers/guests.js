@@ -2,8 +2,11 @@
 
 const utils = require('../util/response');
 
+const common_utils = require('../../common/utils');
+
 const guest_model = require('../models/guest');
 const party_model = require('../models/party');
+const black_list_model = require('../models/blackList');
 
 const guest_rules = require('../rules/guests');
 
@@ -53,7 +56,7 @@ let getGuestForParty = (req, res)=>{
 };
 
 let addGuestToParty = (req, res)=> {
-  console.log('adding guest');
+  //console.log('adding guest');
   if(!req.body.party_id) {
     res.status(400);
     res.json(utils.generateError('No Party ID found in Request'));
@@ -67,17 +70,38 @@ let addGuestToParty = (req, res)=> {
     let new_guests = req.body.guests;
     let added_guests = [];
     let party;
+    let blackList;
     // Use promises to simplify callbacks
     party_model
       .getPartyByIdPromise(req.body.party_id)
       .then((_party)=>{
-        console.log('querying party');
         party = _party;
+        return new Promise((resolve, reject) => {
+          black_list_model.getBlackList((err, people)=>{
+            if(err) {
+              reject(err);
+            } else {
+              resolve(people);
+            }
+          });
+        });
+      })
+      .then((_blacklist)=>{
+        blackList = _blacklist;
         return guest_model.getGuestsForPartyPromise(req.body.party_id);
       })
       .then((_guests)=>{
-        console.log('querying current guests');
         for(let guest of new_guests) {
+          let guest_allowed = true;
+          for(let bl_guest of blackList) {
+            if(common_utils.getNormalizedName(bl_guest.name) == common_utils.getNormalizedName(guest.name)) {
+              guest_allowed = false;
+              break;
+            }
+          }
+          if(!guest_allowed) {
+            continue;
+          }
           guest.party_id = req.body.party_id;
           guest.added_by = req.body.added_by;
           if(isClientAdmin(req.user.sub)) {
@@ -87,16 +111,20 @@ let addGuestToParty = (req, res)=> {
           }
           added_guests.push(guest);
         }
-        guest_model.addGuestsToParty(added_guests, (err, guests)=>{
-          if(err) {
-            res.status(500);
-            res.json(utils.generateError('Error Adding Guests'));
-            return;
-          } else {
-            res.status(201);
-            res.json({guests: guests});
-          }
-        });
+        if(added_guests.length > 0) {
+          guest_model.addGuestsToParty(added_guests, (err, guests)=>{
+            if(err) {
+              res.status(500);
+              res.json(utils.generateError('Error Adding Guests'));
+              return;
+            } else {
+              res.status(201);
+              res.json({guests: guests});
+            }
+          });
+        } else {
+            res.status(400).json(utils.generateError('No Guests Eligible For Party'));
+        }
       })
       .catch((err)=> {
         // Handle error gracefully. ie all guests must be approved by social

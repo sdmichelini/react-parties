@@ -50,7 +50,7 @@ const BlackListStore = new BlackListStoreClass();
 
 BlackListStore.dispatchToken = AppDispatcher.register(action => {
   switch (action.actionType) {
-    case GuestConstants.RECIEVE_BLACK_LIST:
+    case BlackListConstants.RECIEVE_BLACK_LIST:
     {
         if(action.people) {
           setPeople(action.people);
@@ -58,13 +58,13 @@ BlackListStore.dispatchToken = AppDispatcher.register(action => {
         }
         break;
     }
-    case GuestConstants.RECIEVE_BLACK_LIST:
+    case BlackListConstants.RECIEVE_BLACK_LIST:
     {
       alert(action.message);
 
       break;
     }
-    case GuestConstants.ADD_BLACK_LIST:
+    case BlackListConstants.ADD_BLACK_LIST:
     {
       if(action.people) {
         addPeople(action.people);
@@ -73,7 +73,7 @@ BlackListStore.dispatchToken = AppDispatcher.register(action => {
       break;
     }
 
-    case GuestConstants.ADD_BLACK_LIST_ERROR:
+    case BlackListConstants.ADD_BLACK_LIST_ERROR:
     {
       alert(action.message);
       break;

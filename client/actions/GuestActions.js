@@ -16,6 +16,7 @@ export default {
         })
       })
       .catch(response => {
+
         AppDispatcher.dispatch({
           actionType: GuestConstants.RECIEVE_GUESTS_ERROR,
           message: response.errors.msg || 'Error Not Found in API Response.'
@@ -33,7 +34,7 @@ export default {
       })
       .catch(response => {
         AppDispatcher.dispatch({
-          actionType: GuestConstants.RECIEVE_GUESTS_ERROR,
+          actionType: GuestConstants.ADD_GUESTS_ERROR,
           message: response.errors.msg || 'Error Not Found in API Response.'
         });
       });

@@ -25,6 +25,9 @@ let addBlackListItem = (req, res) => {
     res.json(utils.generateError('No Added By Found in Request'));
   } else {
     let people = req.body.people;
+    for(let person of people) {
+      person.added_by = req.body.added_by;
+    }
     black_list_model.addToBlackList(people, (err, _people) => {
       if(err) {
         res.status(500);

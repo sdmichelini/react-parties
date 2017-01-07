@@ -86,6 +86,7 @@ GuestStore.dispatchToken = AppDispatcher.register(action => {
     case GuestConstants.ADD_GUESTS_ERROR:
     {
       alert(action.message);
+      GuestStore.emitChange();
       break;
     }
 
