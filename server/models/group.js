@@ -1,5 +1,7 @@
 'use strict';
 
+const ObjectId = require('mongodb').ObjectID;
+
 let group_collection;
 
 //Initialze the Database
@@ -23,5 +25,33 @@ let getGroupsByUserId = (id, cb) => {
 };
 
 let getGroupById = (id, cb) => {
-  
+  if(id.length != 24) {
+    cb('invalid id', undefined);
+  } else {
+    let obj_id = new ObjectId(id);
+    group_collection.findOne({'_id':obj_id}, (err, group) => {
+      if(err) {
+        cb(err, undefined);
+      } else {
+        cb(undefined, group);
+      }
+    });
+  }
+}
+
+let updateGroupById = (group, cb) => {
+  if(!group || !group._id) {
+    cb('no id found', undefined);
+  } else if(group._id.length != 24) {
+    cb('invalid id', undefined);
+  } else {
+    let obj_id = new ObjectId(group._id);
+    group_collection.update({'_id':obj_id}, {people: group.people, user_id: group.user_id},(err, result) => {
+      if(err) {
+        cb(err, undefined);
+      } else {
+        cb(undefined, group);
+      }
+    });
+  }
 }

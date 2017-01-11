@@ -99,6 +99,13 @@ let addGuestToParty = (req, res)=> {
               break;
             }
           }
+          // Duplicates
+          for(let _cur_guest of _guests) {
+            if(common_utils.getNormalizedName(_cur_guest.name) == common_utils.getNormalizedName(guest.name)) {
+              guest_allowed = false;
+              break;
+            }
+          }
           if(!guest_allowed) {
             continue;
           }
