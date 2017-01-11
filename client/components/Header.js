@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import AuthActions from '../actions/AuthActions';
 import AuthStore from '../stores/AuthStore';
 
+import features from '../../common/features';
+
 require('styles/Nav.css');
 
 class HeaderComponent extends Component {
@@ -51,11 +53,29 @@ class HeaderComponent extends Component {
   render() {
     let content;
     let link = '/';
-    if(this.state.authenticated && this.state.admin) {
+    let groupsEnabled = features.isFeatureEnabled('groups');
+    if(this.state.authenticated && this.state.admin && groupsEnabled) {
       content = (
         <ul className='nav navbar-nav navbar-red-nav'>
           <li role='presentation'><a onClick={this.logout} href='#'>Logout</a></li>
           <li role='presentation'><Link to={'/dashboard'}>Dashboard</Link></li>
+          <li role='presentation'><Link to={'/groups'}>Groups</Link></li>
+        </ul>
+      );
+      link = '/parties';
+    } else if(this.state.authenticated && this.state.admin){
+      content = (
+        <ul className='nav navbar-nav navbar-red-nav'>
+          <li role='presentation'><a onClick={this.logout} href='#'>Logout</a></li>
+          <li role='presentation'><Link to={'/dashboard'}>Dashboard</Link></li>
+        </ul>
+      );
+      link = '/parties';
+    } else if(this.state.authenticated && groupsEnabled) {
+      content = (
+        <ul className='nav navbar-nav navbar-red-nav'>
+          <li role='presentation'><a onClick={this.logout}>Logout</a></li>
+          <li role='presentation'><Link to={'/groups'}>Groups</Link></li>
         </ul>
       );
       link = '/parties';
