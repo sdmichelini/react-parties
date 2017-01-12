@@ -16,6 +16,8 @@ const authCheck = jwt({
   audience: process.env.AUTH0_CLIENT_ID
 });
 
+const features = require('../common/features');
+
 //Controllers
 const groups_controller = require('./controllers/groups');
 const guests_controller = require('./controllers/guests');
@@ -69,6 +71,14 @@ app.delete('/api/guests/:id',authCheck, bodyParser.json(),guests_controller.remo
 app.get('/api/blacklist', authCheck, black_list_controller.getBlackList);
 app.post('/api/blacklist', authCheck, checkAdmin, bodyParser.json(), black_list_controller.addBlackListItem);
 app.delete('/api/blacklist/:id', authCheck, checkAdmin, black_list_controller.deleteBlackListItem);
+
+if(features.isFeatureEnabled('groups')) {
+  app.get('/api/groups', authCheck, groups_controller.getAllGroupsForUser);
+  app.get('/api/groups/:id', authCheck, groups_controller.getGroupById);
+  app.post('/api/groups', authCheck, groups_controller.createGroup);
+  app.put('/api/groups', authCheck, groups_controller.updateGroupById);
+  app.delete('/api/groups', authCheck, groups_controller.removeGroupById);
+}
 
 app.get('/api/auth', authCheck,checkAdmin,(req, res)=>{
   res.json({message:'Token', token: process.env.AUTH0_TOKEN});

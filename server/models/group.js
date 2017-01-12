@@ -39,6 +39,16 @@ let getGroupById = (id, cb) => {
   }
 }
 
+let createGroup = (group, cb) => {
+  group_collection.insert(group, (err, result) => {
+    if(err) {
+      cb(err, undefined);
+    } else {
+      cb(undefined, group);
+    }
+  });
+}
+
 let updateGroupById = (group, cb) => {
   if(!group || !group._id) {
     cb('no id found', undefined);
@@ -54,4 +64,28 @@ let updateGroupById = (group, cb) => {
       }
     });
   }
+}
+
+let removeGroupById = (id, cb) => {
+  if(id.length != 24) {
+    cb('invalid id', undefined);
+  } else {
+    let obj_id = new ObjectId(id);
+    group_collection.remove({'_id':obj_id}, (err, count) => {
+      if(err) {
+        cb(err, 0);
+      } else {
+        cb(undefined, count);
+      }
+    });
+  }
+}
+
+module.exports = {
+  initDb: initDb,
+  getGroupById,
+  getGroupsByUserId: getGroupsByUserId,
+  createGroup: createGroupById,
+  updateGroupById: updateGroupById,
+  removeGroupById: removeGroupById
 }
