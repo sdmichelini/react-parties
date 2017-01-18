@@ -133,13 +133,7 @@ class PartyDetailComponent extends React.Component {
     let guests = GuestStore.getGuests().sort(guestSortCompare);
     let user = JSON.parse(AuthStore.getUser());
     let name;
-    if(user.user_metadata && user.user_metadata.name) {
-      name = user.user_metadata.name;
-    } else if(user.nickname) {
-      name = user.nickname;
-    } else {
-      name = 'unknown';
-    }
+    name = AuthStore.getName();
     for(let guest of guests) {
       if(guest.status != 0) {
         if(guest.male) {
@@ -149,7 +143,7 @@ class PartyDetailComponent extends React.Component {
         }
       } else {
         //Only view guests that we added
-        if(guest.added_by == name) {
+        if(guest.added_by == name || AuthStore.isAdmin()) {
           if(guest.male) {
             un_male_guests.push(guest);
           } else {
