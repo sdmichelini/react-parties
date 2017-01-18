@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 
 let guest = require('../models/guest');
 let party = require('../models/party');
+let bl = require('../models/blackList');
 
 describe('API Test', ()=>{
   const app = require('../application');
@@ -20,6 +21,7 @@ describe('API Test', ()=>{
       }
       guest.initDb(_db);
       party.initDb(_db);
+      bl.initDb(_db);
       db = _db;
       server = app.listen(port, done);
     });

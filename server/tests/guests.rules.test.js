@@ -3,8 +3,8 @@ const expect = require('chai').expect;
 
 const guests_rules = require('../rules/guests');
 
-const test_guest = {name:'Jim', status: 0, added_by: 'Bob'};
-const test_guest_2 = {name:'Jim Smith', status: 0, added_by:'Ben'};
+const test_guest = {name:'Jim', status: 0, added_by: 'Bob', male:true};
+const test_guest_2 = {name:'Jim Smith', status: 0, added_by:'Ben', male:true};
 
 
 

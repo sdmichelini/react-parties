@@ -68,6 +68,7 @@ let addGuestToParty = (req, res)=> {
     res.json(utils.generateError('No Added By Found in Request'));
   } else {
     let new_guests = req.body.guests;
+    console.log(new_guests);
     let added_guests = [];
     let party;
     let blackList;
