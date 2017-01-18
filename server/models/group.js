@@ -85,7 +85,7 @@ module.exports = {
   initDb: initDb,
   getGroupById,
   getGroupsByUserId: getGroupsByUserId,
-  createGroup: createGroupById,
+  createGroup: createGroup,
   updateGroupById: updateGroupById,
   removeGroupById: removeGroupById
 }
