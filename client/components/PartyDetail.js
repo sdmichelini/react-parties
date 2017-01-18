@@ -302,8 +302,8 @@ class PartyDetailComponent extends React.Component {
 
     let un_females = [];
     if(this.state.unapproved_females && (this.state.unapproved_females.length > 0)) {
-      for(let male of this.state.unapproved_males) {
-        let result = getGuestListItem2(male);
+      for(let female of this.state.unapproved_females) {
+        let result = getGuestListItem2(female);
         un_females.push(result);
       }
     } else {
