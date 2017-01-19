@@ -328,7 +328,7 @@ class PartyDetailComponent extends React.Component {
             <div className='col-xs-12'>
               <h2>Party Management</h2>
               <p className='text-muted'>
-                Note only one party can be open at a time.
+                Note only one party can be open at a time. Freed only open the party when the party starts and not earlier you clown.
               </p>
               <button className='btn btn-success' onClick={this.updateParty.bind(this,1)}>Open Party</button>
             </div>
