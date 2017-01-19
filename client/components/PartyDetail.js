@@ -251,7 +251,17 @@ class PartyDetailComponent extends React.Component {
 
   updateParty(status) {
     if(this.state.party && this.state.party._id) {
-      PartyActions.updateParty(this.state.party._id, status);
+      let shouldChange = false;
+
+      if(new Date(this.state.party.when).getTime() > new Date().getTime()) {
+        let result = confirm('Warning: The Date of the Party is later than today. This button should only be hit once guests are ready to be checked in. This button does not control whether or not guests can be added to the list.')
+        shouldChange = result;
+      } else {
+        shouldChange = true;
+      }
+      if(shouldChange) {
+          PartyActions.updateParty(this.state.party._id, status);
+      }
     } else {
       alert('No Party to Open');
     }

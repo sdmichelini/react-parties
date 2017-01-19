@@ -20,7 +20,7 @@ export default {
         .get(url)
         .set('Authorization','Bearer '+AuthStore.getJwt())
         .end((err,response) => {
-          if(err) reject(err);
+          if(err) reject(JSON.parse(response.text));
           resolve(JSON.parse(response.text));
         });
     });

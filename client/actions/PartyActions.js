@@ -25,16 +25,18 @@ export default {
     PartiesAPI
       .getPartyById(URL+'/api/parties/'+id)
       .then(response => {
+        console.log(response);
         AppDispatcher.dispatch({
           actionType: PartyConstants.RECIEVE_PARTY,
           party: response.party
-        })
+        });
       })
       .catch(response => {
+        console.log(response);
         AppDispatcher.dispatch({
           actionType: PartyConstants.RECIEVE_PARTY_ERROR,
           message: response.errors.msg || 'Error Not Found in API Response.'
-        })
+        });
       });
   },
   createParty: (data) => {
