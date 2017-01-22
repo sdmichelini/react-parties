@@ -143,7 +143,7 @@ class PartyDetailComponent extends React.Component {
         }
       } else {
         //Only view guests that we added
-        if(guest.added_by == name || AuthStore.isAdmin()) {
+        if(guest.added_by == name || AuthStore.isSocial()) {
           if(guest.male) {
             un_male_guests.push(guest);
           } else {
@@ -195,7 +195,7 @@ class PartyDetailComponent extends React.Component {
         }
       } else {
         //Only view guests that we added
-        if(guest.added_by == name) {
+        if(guest.added_by == name || AuthStore.isSocial()) {
           if(guest.male) {
             un_male_guests.push(guest);
           } else {
