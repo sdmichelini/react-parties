@@ -26,5 +26,6 @@ function isFeatureEnabled(feature) {
 }
 
 module.exports = {
-  isFeatureEnabled: isFeatureEnabled
+  isFeatureEnabled: isFeatureEnabled,
+  isDevelopment: isDevelopment
 }
