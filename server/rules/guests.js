@@ -27,13 +27,10 @@ let applyGuestStatus = (guest, cur_guests, cur_party) => {
       // Only count male guests that are already on the list
       let number_guests = cur_guests
         .filter((_guest) => {
-          return (_guest.added_by == guest.added_by)&&(_guest.status != constants.STATUS_AWAITING_APPROVAL)&&(_guest.male);
+          return (_guest.added_by == guest.added_by)&&(_guest.status != constants.STATUS_AWAITING_APPROVAL);
         })
         .length;
-      if(number_guests < 2) {
-        guest.status = constants.STATUS_ON_LIST;
-      }
-      if(!guest.male) {
+      if(number_guests < 3) {
         guest.status = constants.STATUS_ON_LIST;
       }
       break;
