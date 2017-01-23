@@ -22,7 +22,7 @@ class HeaderComponent extends Component {
   }
 
   login() {
-    if(!features.isDevelopment() && location.profile != 'https:') {
+    if(!features.isDevelopment() && location.protocol != 'https:') {
       alert('WARNING: You must be using a https connection to log-in. Please go to the https version of this site. Log-in attempt failed.');
       return;
     }
