@@ -378,13 +378,13 @@ class PartyDetailComponent extends React.Component {
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
         <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
         <div className='row'>
-          <div className='col-xs-12 col-sm-6'>
+          <div className='col-xs-12 col-sm-6 page-break'>
             <h3>Males</h3>
             <ul className='guest-list'>
               { males }
             </ul>
           </div>
-          <div className='col-xs-12 col-sm-6'>
+          <div className='col-xs-12 col-sm-6 page-break'>
             <h3>Females</h3>
             <ul className='guest-list'>
               { females }

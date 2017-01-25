@@ -54,3 +54,7 @@
   border-color: #d06060;
   color: white!important;
 }
+
+@media print {
+    .page-break {page-break-after: always;}
+}
