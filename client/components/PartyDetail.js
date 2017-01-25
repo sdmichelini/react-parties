@@ -273,6 +273,8 @@ class PartyDetailComponent extends React.Component {
 
     let is_party_open = (this.state.party && this.state.party.status && (this.state.party.status == 1));
 
+    let party_open_disclaimer = (is_party_open) ? (<p className='alert alert-info'><strong>Party Open: </strong>{ 'The Party is Open. Make Sure to Add and Check-In Any New Guests.' }</p>) : '';
+
     // Create Guest List Items
     let males = [];
     if(this.state.male_guests && (this.state.male_guests.length > 0)) {
@@ -374,6 +376,7 @@ class PartyDetailComponent extends React.Component {
     return (
       <div>
         <h1>{ party_name }</h1>
+        { party_open_disclaimer }
         <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} onChange={this.handleFilterChange}/>
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
         <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
