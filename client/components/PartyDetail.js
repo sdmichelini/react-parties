@@ -56,7 +56,9 @@ class PartyDetailComponent extends React.Component {
       female_guests: [],
       unapproved_males: [],
       unapproved_females: [],
-      search_filter: ''
+      search_filter: '',
+      male_count: 0,
+      female_count: 0
     }
     this.onPartyChange = this.onPartyChange.bind(this);
     this.onGuestChange = this.onGuestChange.bind(this);
@@ -157,7 +159,9 @@ class PartyDetailComponent extends React.Component {
       male_guests: male_guests,
       female_guests: female_guests,
       unapproved_males: un_male_guests,
-      unapproved_females: un_female_guests
+      unapproved_females: un_female_guests,
+      male_count: male_guests.filter((male) => {return male.status}).length,
+      female_count: female_guests.filter((female) => {return female.status}).length
     });
   }
 
@@ -380,6 +384,9 @@ class PartyDetailComponent extends React.Component {
         <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} onChange={this.handleFilterChange}/>
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
         <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
+        <p style={{marginTop: '10px'}}>
+          There are { this.state.female_count } females and { this.state.male_count } males on the list. For you math majors that is { this.state.female_count + this.state.male_count } guests.
+        </p>
         <div className='row'>
           <div className='col-xs-12 col-sm-6 page-break'>
             <h3>Males</h3>
