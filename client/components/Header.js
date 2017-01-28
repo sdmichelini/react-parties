@@ -26,7 +26,11 @@ class HeaderComponent extends Component {
       alert('WARNING: You must be using a https connection to log-in. Please go to the https version of this site. Log-in attempt failed.');
       return;
     }
-    this.props.lock.show((err, profile, token) => {
+    this.props.lock.show({
+      authParams: {
+        scope: 'openid app_metadata'
+      }
+    },(err, profile, token) => {
       if (err) {
         alert(err);
         return;

@@ -3,6 +3,8 @@ import AuthConstants from '../constants/AuthConstants';
 import { EventEmitter } from 'events';
 import jwt_decode from 'jwt-decode';
 
+import permissions from '../../common/permission'
+
 const CHANGE_EVENT = 'change';
 
 function setUser(profile, token) {
@@ -80,6 +82,12 @@ class AuthStoreClass extends EventEmitter {
       return false;
     }
     return false;
+  }
+
+  hasPermission(perm) {
+    let user = localStorage.getItem('profile');
+    user = JSON.parse(user);
+    return permissions.hasPermission(perm, user.app_metadata.roles || []);
   }
 
   isAdmin() {
