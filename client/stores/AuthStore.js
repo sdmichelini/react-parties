@@ -126,7 +126,9 @@ class AuthStoreClass extends EventEmitter {
     return false;
   }
 
-
+  getPermissions() {
+    return permissions.PERMISSIONS;
+  }
 
   getJwt() {
     return localStorage.getItem('id_token');
@@ -156,5 +158,4 @@ AuthStore.dispatchToken = AppDispatcher.register(action => {
   }
 
 });
-
 export default AuthStore;

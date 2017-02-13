@@ -7,7 +7,6 @@ import BlackListActions from '../actions/BlackListActions';
 import BlackListAddComponent from './BlackListAdd';
 import BlackListItemComponent from './BlackListItem';
 
-import permissions from '../../common/permission'
 import AuthStore from '../stores/AuthStore'
 
 class BlackListComponent extends Component {
@@ -43,7 +42,7 @@ class BlackListComponent extends Component {
     let people_components = this.state.people.map((person) =>
       <BlackListItemComponent key={person._id} guest={person} />
     );
-    let black_list_add = (AuthStore.hasPermission(permissions.PERMISSIONS.editBlacklist)) ?
+    let black_list_add = (AuthStore.hasPermission(AuthStore.getPermissions().editBlacklist)) ?
       (<BlackListAddComponent />) : (<p>You do not have permission to edit the blacklist. You must be the president to do so. </p>);
     return (
       <div>

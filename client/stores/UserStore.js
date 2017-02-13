@@ -22,6 +22,14 @@ function setUsers(users) {
     }
 }
 
+function appendFullUsers(users) {
+  _full_users = _full_users.concat(users);
+}
+
+function appendUsers(users) {
+  _users = _full_users.concat(users);
+}
+
 function setFullUsers(users) {
   _full_users = users;
 }
@@ -79,19 +87,17 @@ UserStore.dispatchToken = AppDispatcher.register(action => {
 
   switch(action.actionType) {
     case UserConstants.RECIEVE_USERS:
-      let verifiedUsers = [];
-      for (let user of action.users) {
-        //Verify that they are a user
-        if(user.app_metadata && user.app_metadata.roles && (user.app_metadata.roles.indexOf('user') > -1)) {
-          verifiedUsers.push(user);
-        }
-      }
-      setUsers(verifiedUsers);
+
       setFullUsers(action.users);
       // We need to call emitChange so the event listener
       // knows that a change has been made
       UserStore.emitChange();
       break
+    case UserConstants.APPEND_USERS: {
+      appendFullUsers(action.users);
+      UserStore.emitChange();
+      break;
+    }
 
     case UserConstants.RECIEVE_USERS_ERROR:
       alert(action.message);
