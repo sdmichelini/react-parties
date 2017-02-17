@@ -206,9 +206,56 @@ let removeGuestFromParty = (req, res) => {
   }
 }
 
+function buildCsv(guests) {
+  let response = "Males\r\nName, Invited By, Checked In\r\n";
+  guests.sort((a, b) => {
+    if(a.male && !b.male) {
+      return -1;
+    } else if(!a.male && b.male) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  let is_female = false;
+  for(let guest of guests) {
+    if(!is_female && !guest.male){
+      is_female = true;
+      response = response + "\r\nFemales\r\n";
+    }
+    response = response + guest.name + "," + guest.added_by;
+    if(guest.checked_in) {
+        response = response + String(new Date(guest.checked_in));
+    }
+    response = response + "\r\n";
+  }
+  return response;
+}
+
+let guestListCsvForParty = (req, res) => {
+  if(!req.query.party_id) {
+    res.status(400).send(utils.generateError('No Party ID Specified'));
+  } else {
+    guest_model.getGuestsForParty(req.query.party_id, (err, guests) => {
+      if(err) {
+        res.status(500);
+        res.send(utils.generateError('Guests DB Error'));
+      }
+      else if(!guests) {
+        res.status(404);
+        res.send(utils.generateError('No Guests for Party ID Found.'));
+      } else {
+        res.header("Content-Type", "text/csv");
+        res.send(buildCsv(guests));
+      }
+    });
+  }
+}
+
 module.exports ={
   getGuestForParty: getGuestForParty,
   addGuestToParty: addGuestToParty,
   updateGuestForParty: updateGuestForParty,
-  removeGuestFromParty: removeGuestFromParty
+  removeGuestFromParty: removeGuestFromParty,
+  guestListCsvForParty: guestListCsvForParty
 }

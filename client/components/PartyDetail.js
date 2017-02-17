@@ -377,10 +377,14 @@ class PartyDetailComponent extends React.Component {
       }
     }
 
+    let downloadText;
+    if(AuthStore.isSocial()) {
+      downloadText = (<a href={'/party.csv?party_id='+this.props.params.id}>Download Party Excel</a>);
+    }
+
     return (
       <div>
         <h1>{ party_name }</h1>
-        { party_open_disclaimer }
         <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} onChange={this.handleFilterChange}/>
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
         <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
@@ -416,6 +420,7 @@ class PartyDetailComponent extends React.Component {
           </div>
         </div>
         { manageText }
+        { downloadText }
       </div>
     );
   }

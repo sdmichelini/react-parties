@@ -72,6 +72,8 @@ app.get('/api/blacklist', authCheck, black_list_controller.getBlackList);
 app.post('/api/blacklist', authCheck, checkAdmin, bodyParser.json(), black_list_controller.addBlackListItem);
 app.delete('/api/blacklist/:id', authCheck, checkAdmin, black_list_controller.deleteBlackListItem);
 
+app.get('/party.csv',guests_controller.guestListCsvForParty)
+
 if(features.isFeatureEnabled('groups')) {
   app.get('/api/groups', authCheck, groups_controller.getAllGroupsForUser);
   app.get('/api/groups/:id', authCheck, groups_controller.getGroupById);

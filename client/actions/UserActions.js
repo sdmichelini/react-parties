@@ -71,7 +71,12 @@ export default {
       .then(response => {
         for(let user of users) {
           if(user.is_changed) {
-            UsersAPI.updateUser('https://tkezm.auth0.com/api/v2/users', user.user_id, user.app_metadata.roles,response.token, user.user_metadata||{})
+            UsersAPI.updateUser(
+            'https://tkezm.auth0.com/api/v2/users',
+            user.user_id,
+            user.app_metadata.roles,
+            response.token,
+            user.user_metadata||{})
             .then(response => {
               AppDispatcher.dispatch({
                 actionType: UserConstants.SUBMIT_USERS_STATUS,
