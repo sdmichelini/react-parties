@@ -96,6 +96,13 @@ class PartyDetailComponent extends React.Component {
       });
     }
     GuestActions.receiveGuestsById(this.props.params.id);
+    window.addEventListener("keydown", (e) => {
+      if(e.keyCode == 114 || (e.ctrlKey && (e.keyCode == 70))) {
+        // Select our search bar
+        e.preventDefault();
+        this.nameInput.focus();
+      }
+    });
 
   }
 
@@ -385,7 +392,7 @@ class PartyDetailComponent extends React.Component {
     return (
       <div>
         <h1>{ party_name }</h1>
-        <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} onChange={this.handleFilterChange}/>
+        <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} ref={(input) => { this.nameInput = input; }} onChange={this.handleFilterChange}/>
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
         <button type='button' className='btn btn-female' onClick={this.onFemaleAdd} disabled={!add_female_enabled}>{ female_text }</button>
         <p style={{marginTop: '10px'}}>
