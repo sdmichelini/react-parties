@@ -6,7 +6,8 @@ import PartyStore from '../stores/PartyStore';
 
 const COMMON_EVENTS = [
   {name:'Party', type: 0},
-  {name:'Social', type: 1}
+  {name:'Social', type: 1},
+  {name:'Moderated', type:2}
 ];
 
 class CreatePartyComponent extends Component {
