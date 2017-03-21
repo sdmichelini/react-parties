@@ -7,7 +7,7 @@ import PartiesAPI from '../utils/PartiesAPI';
 export default {
   receiveParties: () => {
     PartiesAPI
-      .getParties(URL+'/api/parties')
+      .getParties(URL+'/api/parties/')
       .then(response => {
         AppDispatcher.dispatch({
           actionType: PartyConstants.RECIEVE_PARTIES,
@@ -41,7 +41,7 @@ export default {
   },
   createParty: (data) => {
     PartiesAPI
-      .createParty(URL+'/api/parties', {party: data})
+      .createParty(URL+'/api/parties/', {party: data})
       .then(response => {
         AppDispatcher.dispatch({
           actionType: PartyConstants.CREATE_PARTY,

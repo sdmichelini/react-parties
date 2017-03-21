@@ -5,18 +5,18 @@ require('styles/GuestList.css')
 import React from 'react';
 
 import GuestActions from '../actions/GuestActions';
-import GuestStore from '../stores/GuestStore';
-
 import PartyActions from '../actions/PartyActions';
-import PartyStore from '../stores/PartyStore';
 
 import AuthStore from '../stores/AuthStore';
+import PartyStore from '../stores/PartyStore';
+import GuestStore from '../stores/GuestStore';
 
 import GuestUtils from '../utils/GuestUtils';
 
 import GuestListItem from './GuestListItem';
+import Tips, { PARTY_LIST_TIPS } from './Tips';
 
-import {WS_URL} from '../constants/UrlConstants';
+import { WS_URL } from '../constants/UrlConstants';
 
 function getGuestListItem2(guest, open) {
   let ret = (
@@ -388,9 +388,9 @@ class PartyDetailComponent extends React.Component {
     if(AuthStore.isSocial()) {
       downloadText = (<a href={'/party.csv?party_id='+this.props.params.id}>Download Party Excel</a>);
     }
-
     return (
       <div>
+        <Tips tips={ PARTY_LIST_TIPS }/>
         <h1>{ party_name }</h1>
         <input type='text' className='form-control' placeholder='Guest Name' value={this.state.search_filter} ref={(input) => { this.nameInput = input; }} onChange={this.handleFilterChange}/>
         <button type='button' className='btn btn-male' onClick={this.onMaleAdd} disabled={!add_male_enabled}>{ male_text }</button>
@@ -398,6 +398,8 @@ class PartyDetailComponent extends React.Component {
         <p style={{marginTop: '10px'}}>
           There are { this.state.female_count } females and { this.state.male_count } males on the list. For you math majors that is { this.state.female_count + this.state.male_count } guests.
         </p>
+        
+        
         <div className='row'>
           <div className='col-xs-12 col-sm-6 page-break'>
             <h3>Males</h3>
