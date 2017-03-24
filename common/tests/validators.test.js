@@ -12,7 +12,9 @@ const BAD_INPUT = [
 const GOOD_INPUT = [
   'Good Name',
   'Good',
-  'rick'
+  'rick',
+  "O'Reilly",
+  'Hyphen-name'
 ];
 
 
