@@ -95,14 +95,16 @@ let addGuestToParty = (req, res)=> {
         for(let guest of new_guests) {
           let guest_allowed = true;
           for(let bl_guest of blackList) {
-            if(common_utils.getNormalizedName(bl_guest.name) == common_utils.getNormalizedName(guest.name)) {
+            if(common_utils.getNormalizedName(bl_guest.name) 
+              == common_utils.getNormalizedName(guest.name)) {
               guest_allowed = false;
               break;
             }
           }
           // Duplicates
           for(let _cur_guest of _guests) {
-            if(common_utils.getNormalizedName(_cur_guest.name) == common_utils.getNormalizedName(guest.name)) {
+            if(common_utils.getNormalizedName(_cur_guest.name) 
+              == common_utils.getNormalizedName(guest.name)) {
               guest_allowed = false;
               break;
             }
@@ -112,6 +114,8 @@ let addGuestToParty = (req, res)=> {
           }
           guest.party_id = req.body.party_id;
           guest.added_by = req.body.added_by;
+          // When are they added
+          guest.added_at = Date.now();
           if(isClientAdmin(req.user.sub)) {
             guest.status = constants.STATUS_ON_LIST;
           } else {
