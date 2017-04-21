@@ -5,7 +5,7 @@ import React from 'react';
 
 const PARTY_LIST_TIPS = [
     {name:'Multiple Guests', text:`
-        You can add multiple guests to the list at once by seperating there names with a comma.
+        You can add multiple guests to the list at once by separating thier names with a comma.
         Guests added this way must be of the same gender.
     `}
 ];
